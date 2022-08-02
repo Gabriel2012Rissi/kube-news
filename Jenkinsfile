@@ -84,7 +84,15 @@ pipeline {
                     sleep 35
 
                     // Testando a conexao via curl
-                    sh "curl -iL -X GET 'http://kubenews:3000/ready'"
+                    sh """
+                       docker run \
+                       -it \
+                       --rm \
+                       --network jenkins_test-${env.BUILD_NUMBER} \
+                       --network-alias curl \
+                       alpine/curl \
+                       /bin/sh -c 'curl -iL -X GET http://kubenews:3000/ready'
+                       """
                 }
             }
             post {
