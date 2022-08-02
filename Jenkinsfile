@@ -99,9 +99,11 @@ pipeline {
                     echo 'Cleanning up...'
 
                     // Removendo o banco de dados 'postgres'
+                    sh "docker stop postgres-${env.BUILD_NUMBER} || true"
                     sh "docker rm -f postgres-${env.BUILD_NUMBER} || true"
 
                     // Removendo o container 'kube-news'
+                    sh "docker stop kube-news-${env.BUILD_NUMBER} || true"
                     sh "docker rm -f kube-news-${env.BUILD_NUMBER} || true"
 
                     sleep 10
