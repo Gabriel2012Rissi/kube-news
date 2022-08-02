@@ -82,6 +82,7 @@ pipeline {
 
                     // Testando a conexao via curl
                     sh "curl -X GET http://localhost:3000/ready"
+                }
             }
             post {
                 always {
