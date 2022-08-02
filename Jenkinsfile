@@ -59,7 +59,7 @@ pipeline {
                         --env POSTGRES_DB=db_test \
                         --network jenkins_test-${env.BUILD_NUMBER} \
                         --network-alias postgres \
-                        postgres:latest
+                        postgres:alpine
                         """
 
                     // Aguardando até o banco de dados ser iniciado
@@ -79,6 +79,9 @@ pipeline {
                        --network-alias kube-news \
                        ${appImage.id}
                        """
+
+                    // Aguardando até o container ser iniciado
+                    sleep 30
 
                     // Testando a conexao via curl
                     sh "curl -X GET http://localhost:3000/ready"
