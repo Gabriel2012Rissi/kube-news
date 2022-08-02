@@ -86,7 +86,6 @@ pipeline {
                     // Testando a conexao via curl
                     sh """
                        docker run \
-                       -it \
                        --rm \
                        --network jenkins_test-${env.BUILD_NUMBER} \
                        --network-alias curl \
