@@ -120,11 +120,21 @@ pipeline {
                     docker.withRegistry("https://registry.hub.docker.com", "dockerhub") {
                         if ("${env.BRANCH_NAME}" == "master") {
                             appImage.push("latest")
-                            appImage.push("${VERSION}")
+                            appImage.push("${IMAGE_TAG}")
                         } else {
                             appImage.push("${IMAGE_TAG}")
                         }
                     }
+                }
+            }
+        }
+        stage('Trigger Manifest Update') {
+            steps {
+                script {
+                    echo 'Triggering Manifest Update...'
+                    build job: 'kube-news-manifest-update', parameters: [
+                        string(name: "DOCKER_IMAGE", value: "${env.REPOSITORY}:${IMAGE_TAG}")
+                    ]
                 }
             }
         }
