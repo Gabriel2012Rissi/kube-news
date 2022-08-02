@@ -84,7 +84,7 @@ pipeline {
                     sleep 35
 
                     // Testando a conexao via curl
-                    sh "curl -iL -X GET 'http://localhost:3000/ready'"
+                    sh "curl -iL -X GET 'http://api:3000/ready'"
                 }
             }
             post {
