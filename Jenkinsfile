@@ -54,9 +54,9 @@ pipeline {
                         --detach \
                         --name postgres-${env.BUILD_NUMBER} \
                         --publish 5432:5432 \
-                        --env POSTGRES_USER=test \
-                        --env POSTGRES_PASSWORD=test123 \
-                        --env POSTGRES_DB=db_test \
+                        -e POSTGRES_USER=test \
+                        -e POSTGRES_PASSWORD=test123 \
+                        -e POSTGRES_DB=db_test \
                         --network jenkins_test-${env.BUILD_NUMBER} \
                         --network-alias postgres \
                         postgres:alpine
@@ -71,20 +71,20 @@ pipeline {
                        --detach \
                        --name kube-news-${env.BUILD_NUMBER} \
                        --publish 3000:3000 \
-                       --env DB_HOST=postgres \
-                       --env DB_USERNAME=test \
-                       --env DB_PASSWORD=test123 \
-                       --env DB_DATABASE=db_test \
+                       -e DB_HOST=postgres \
+                       -e DB_USERNAME=test \
+                       -e DB_PASSWORD=test123 \
+                       -e DB_DATABASE=db_test \
                        --network jenkins_test-${env.BUILD_NUMBER} \
                        --network-alias kube-news \
                        ${appImage.id}
                        """
 
                     // Aguardando até o container ser iniciado
-                    sleep 30
+                    sleep 35
 
                     // Testando a conexao via curl
-                    sh "curl -X GET http://localhost:3000/ready"
+                    sh "curl -iL -X GET 'http://localhost:3000/ready'"
                 }
             }
             post {
