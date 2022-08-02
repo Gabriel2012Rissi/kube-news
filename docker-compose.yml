@@ -1,0 +1,42 @@
+version: '3.5'
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - kube-news-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  kube-news:
+    build: ./src
+    container_name: kube-news
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: postgres
+    networks:
+      - kube-news-network
+    volumes:
+      - ./src:/usr/src/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data: {}
+
+networks:
+  kube-news-network: null
